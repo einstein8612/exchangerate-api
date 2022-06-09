@@ -1,5 +1,5 @@
 import { CronJob } from 'cron'
-import fetch from 'node-fetch'
+import axios from "axios"
 
 type Currency = {
   name: string
@@ -14,15 +14,14 @@ export class ECB {
   }
 
   fetchCurrencies() {
-    fetch(
+    axios.get(
       'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
     )
-      .then((response) => response.text())
-      .then((content: string) => {
+      .then((response) => {
         const currencies: Currency[] = []
 
         const parser: DOMParser = new DOMParser()
-        const document: Document = parser.parseFromString(content, 'text/html')
+        const document: Document = parser.parseFromString(response.data, 'text/html')
         const rows: HTMLCollection | undefined = document.querySelector(
           `table[class="forextable"] tbody`,
         )?.children
