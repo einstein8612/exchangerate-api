@@ -12,9 +12,9 @@ app.listen(process.env.PORT || 80, () => {
 
 const apiRouter: express.Router  = express.Router()
 apiRouter.use((req, res, next) => {
-  res.setHeader("Server", "Einstein")
-  res.setHeader("Accept", "application/json")
-  res.setHeader("Content-Type", "application/json")
+  res.set("Server", "Einstein#0001")
+  res.set("Accept", "application/json")
+  res.set("Content-Type", "application/json")
   next()
 })
 
