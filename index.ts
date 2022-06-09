@@ -30,6 +30,8 @@ apiRouter.get('/', (_, res) => {
 
 apiRouter.get('/rates', (req, res) => {
   const base: string = req.query.base ? String(req.query.base) : "EUR"
+  const currencies = ecbClient.getCurrencies()
+
 
   res.send(ecbClient.getCurrencies())
 })

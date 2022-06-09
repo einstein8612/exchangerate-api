@@ -1,14 +1,9 @@
 import { CronJob } from 'cron'
-import {JSDOM} from "jsdom"
+import { JSDOM } from 'jsdom'
 import axios from 'axios'
 
-type Currency = {
-  name: string
-  code: string
-  rate: number
-}
-
 export class ECB {
+  lastUpdated: Date = new Date()
   currencies: Currency[] = []
   constructor() {
     new CronJob('0 17 * * *', this.fetchCurrencies, null, true, 'UTC+1')
@@ -23,7 +18,9 @@ export class ECB {
         const currencies: Currency[] = []
 
         const dom: JSDOM = new JSDOM(response.data)
-        const rows: HTMLCollection | undefined = dom.window.document.querySelector(
+        const rows:
+          | HTMLCollection
+          | undefined = dom.window.document.querySelector(
           `table[class="forextable"] tbody`,
         )?.children
         if (!rows) {
@@ -42,11 +39,22 @@ export class ECB {
           })
         })
 
+        currencies.push({
+          code: 'EUR',
+          name: 'Euro',
+          rate: 1,
+        })
+
+        this.lastUpdated = new Date()
         this.currencies = currencies
       })
   }
 
   getCurrencies() {
     return this.currencies
+  }
+
+  getLastUpdated() {
+    return this.lastUpdated
   }
 }
