@@ -21,7 +21,12 @@ apiRouter.use((req, res, next) => {
 })
 
 apiRouter.get('/', (_, res) => {
-  res.send({ test: process.env })
+  res.redirect('/')
 })
 
-app.use('/api', apiRouter)
+apiRouter.get('/rates', (req, res) => {
+  const base: string = req.query.base ? String(req.query.base) : "EUR"
+  res.send(base)
+})
+
+app.use('/api/v1', apiRouter)
