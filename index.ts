@@ -1,4 +1,8 @@
 import express from 'express'
+import {ECB} from './ecb'
+
+const ecbClient = new ECB()
+ecbClient.fetchCurrencies()
 
 const app = express()
 app.disable('x-powered-by')
@@ -26,7 +30,8 @@ apiRouter.get('/', (_, res) => {
 
 apiRouter.get('/rates', (req, res) => {
   const base: string = req.query.base ? String(req.query.base) : "EUR"
-  res.send(base)
+
+  res.send(ecbClient.getCurrencies())
 })
 
 app.use('/api/v1', apiRouter)
