@@ -9,3 +9,17 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 80, () => {
   console.log(`Server started on port ${process.env.PORT || 80}`)
 })
+
+const apiRouter: express.Router  = express.Router()
+apiRouter.use((req, res, next) => {
+  res.setHeader("Server", "Einstein")
+  res.setHeader("Accept", "application/json")
+  res.setHeader("Content-Type", "application/json")
+  next()
+})
+
+apiRouter.get("/", (_, res) => {
+  res.send({"test": "hello"})
+})
+
+app.use("/api", apiRouter)
