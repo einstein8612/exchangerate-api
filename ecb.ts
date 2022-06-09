@@ -1,5 +1,6 @@
 import { CronJob } from 'cron'
-import axios from "axios"
+import {JSDOM} from "jsdom"
+import axios from 'axios'
 
 type Currency = {
   name: string
@@ -14,15 +15,15 @@ export class ECB {
   }
 
   fetchCurrencies() {
-    axios.get(
-      'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
-    )
+    axios
+      .get(
+        'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
+      )
       .then((response) => {
         const currencies: Currency[] = []
 
-        const parser: DOMParser = new DOMParser()
-        const document: Document = parser.parseFromString(response.data, 'text/html')
-        const rows: HTMLCollection | undefined = document.querySelector(
+        const dom: JSDOM = new JSDOM(response.data)
+        const rows: HTMLCollection | undefined = dom.window.document.querySelector(
           `table[class="forextable"] tbody`,
         )?.children
         if (!rows) {
@@ -30,9 +31,9 @@ export class ECB {
         }
 
         Array.from(rows).forEach((row) => {
-          const code = row.querySelector('.currency a')?.innerHTML
-          const name = row.querySelector('.alignLeft a')?.innerHTML
-          const rate = row.querySelector('.rate')?.innerHTML
+          const code = row.querySelector('.currency a')?.textContent
+          const name = row.querySelector('.alignLeft a')?.textContent
+          const rate = row.querySelector('.rate')?.textContent
 
           currencies.push({
             code: code ? code : '',
