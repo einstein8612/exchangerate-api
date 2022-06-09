@@ -14,7 +14,8 @@ const apiRouter: express.Router  = express.Router()
 apiRouter.use((req, res, next) => {
   res.set("Server", "Einstein#0001")
   res.set("Accept", "application/json")
-  res.set("Content-Type", "application/json")
+
+  res.type("application/json")
   next()
 })
 
