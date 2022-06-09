@@ -1,0 +1,19 @@
+{
+  "name": "exchangerate-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/einstein8612/exchangerate-api.git"
+  },
+  "author": "einstein8612 (Joey Li)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/einstein8612/exchangerate-api/issues"
+  },
+  "homepage": "https://github.com/einstein8612/exchangerate-api#readme"
+}
