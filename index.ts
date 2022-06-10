@@ -1,4 +1,5 @@
 import express from 'express'
+import { TSMap } from "typescript-map"
 import { ECB } from './ecb'
 
 const ecbClient = new ECB()
@@ -41,7 +42,7 @@ apiRouter.get('/rates', (req, res) => {
   }
   const euroPerBase: number = 1 / baseCurrency.rate
 
-  const currencyMap = new Map()
+  const currencyMap = new TSMap()
   currencies.forEach((currency) => {
     currencyMap.set(currency.code, {
       name: currency.name,
@@ -49,11 +50,12 @@ apiRouter.get('/rates', (req, res) => {
       rate: currency.rate * euroPerBase * amount,
     })
   })
+
   const response = {
     base: base,
     amount: amount,
     last_updated: ecbClient.getLastUpdated(),
-    currencies: currencyMap,
+    currencies: currencyMap.toJSON(),
   }
 
   res.send(response)
