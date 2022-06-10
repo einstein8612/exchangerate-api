@@ -1,5 +1,5 @@
 import express from 'express'
-import {ECB} from './ecb'
+import { ECB } from './ecb'
 
 const ecbClient = new ECB()
 ecbClient.fetchCurrencies()
@@ -29,11 +29,24 @@ apiRouter.get('/', (_, res) => {
 })
 
 apiRouter.get('/rates', (req, res) => {
-  const base: string = req.query.base ? String(req.query.base) : "EUR"
+  const base: string = req.query.base ? String(req.query.base) : 'EUR'
   const currencies = ecbClient.getCurrencies()
+  const baseCurrency: Currency = currencies.filter(
+    (currency) => currency.code === base,
+  )[0]
+  if (!baseCurrency) {
+    res.status(404).send({ error: "this currency wasn't recognised" })
+    return
+  }
+  const euroPerBase: number = 1 / baseCurrency.rate
 
+  const response = {
+    base: base,
+    last_updated: ecbClient.getLastUpdated(),
+    currencies: currencies.map((currency) => currency.rate * euroPerBase),
+  }
 
-  res.send(ecbClient.getCurrencies())
+  res.send(response)
 })
 
 app.use('/api/v1', apiRouter)
