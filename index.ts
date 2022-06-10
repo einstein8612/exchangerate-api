@@ -41,20 +41,19 @@ apiRouter.get('/rates', (req, res) => {
   }
   const euroPerBase: number = 1 / baseCurrency.rate
 
+  const currencyMap = new Map()
+  currencies.forEach((currency) => {
+    currencyMap.set(currency.code, {
+      name: currency.name,
+      code: currency.code,
+      rate: currency.rate * euroPerBase * amount,
+    })
+  })
   const response = {
     base: base,
     amount: amount,
     last_updated: ecbClient.getLastUpdated(),
-    currencies: currencies.map((currency) => {
-      return {
-        key: currency.code,
-        value: {
-          name: currency.name,
-          code: currency.code,
-          rate: currency.rate * euroPerBase * amount,
-        },
-      }
-    }),
+    currencies: currencyMap,
   }
 
   res.send(response)
