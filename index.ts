@@ -30,7 +30,7 @@ apiRouter.get('/', (_, res) => {
 
 apiRouter.get('/rates', (req, res) => {
   const base: string = req.query.base ? String(req.query.base) : 'EUR'
-  const amount: number = req.query.base ? parseFloat(req.query.amount ? String(req.query.amount) : "0") : 1
+  const amount: number = req.query.amount ? parseFloat(req.query.amount ? String(req.query.amount) : "0") : 1
   const currencies = ecbClient.getCurrencies()
   const baseCurrency: Currency = currencies.filter(
     (currency) => currency.code === base,
