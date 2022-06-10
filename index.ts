@@ -30,6 +30,7 @@ apiRouter.get('/', (_, res) => {
 
 apiRouter.get('/rates', (req, res) => {
   const base: string = req.query.base ? String(req.query.base) : 'EUR'
+  const amount: number = req.query.base ? parseFloat(req.query.amount ? String(req.query.amount) : "0") : 1
   const currencies = ecbClient.getCurrencies()
   const baseCurrency: Currency = currencies.filter(
     (currency) => currency.code === base,
@@ -42,6 +43,7 @@ apiRouter.get('/rates', (req, res) => {
 
   const response = {
     base: base,
+    amount: amount,
     last_updated: ecbClient.getLastUpdated(),
     currencies: currencies.map((currency) => {
       return {
@@ -49,7 +51,7 @@ apiRouter.get('/rates', (req, res) => {
         value: {
           name: currency.name,
           code: currency.code,
-          rate: currency.rate * euroPerBase,
+          rate: currency.rate * euroPerBase * amount,
         },
       }
     }),
