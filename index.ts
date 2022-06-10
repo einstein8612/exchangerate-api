@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { TSMap } from "typescript-map"
 import { ECB } from './ecb'
 
@@ -20,10 +21,11 @@ const apiRouter: express.Router = express.Router()
 apiRouter.use((req, res, next) => {
   res.set('Accept', 'application/json')
   res.set('X-Server', 'Einstein#0001')
-
   res.type('application/json')
   next()
 })
+
+apiRouter.use(cors())
 
 apiRouter.get('/', (_, res) => {
   res.redirect('/')
